@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Image Gallery</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --teal: #00C9A7;
+  --bg: #080808;
+  --bg2: #111;
+  --bg3: #181818;
+  --border: #1f1f1f;
+  --text: #e8e8e8;
+  --muted: #666;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  min-height: 100vh;
+}
+
+/* HEADER */
+header {
+  padding: 2.5rem 5% 0;
+  text-align: center;
+}
+
+header h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(28px, 5vw, 48px);
+  font-weight: 800;
+  letter-spacing: -1.5px;
+  color: #fff;
+}
+header h1 span { color: var(--teal); }
+header p {
+  color: var(--muted);
+  margin-top: 0.5rem;
+  font-size: 14px;
+  font-weight: 300;
+}
+
+/* FILTERS */
+.filters {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  padding: 2rem 5% 1.5rem;
+}
+
+.filter-btn {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-family: 'Syne', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 7px 18px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.3px;
+}
+.filter-btn:hover { border-color: var(--teal); color: var(--teal); }
+.filter-btn.active {
+  background: var(--teal);
+  border-color: var(--teal);
+  color: #000;
+}
+
+/* GALLERY GRID */
+.gallery {
+  padding: 0 5% 5rem;
+  columns: 4;
+  column-gap: 12px;
+}
+
+@media (max-width: 1100px) { .gallery { columns: 3; } }
+@media (max-width: 700px)  { .gallery { columns: 2; } }
+@media (max-width: 400px)  { .gallery { columns: 1; } }
+
+.gallery-item {
+  break-inside: avoid;
+  margin-bottom: 12px;
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.gallery-item.hidden {
+  display: none;
+}
+
+.gallery-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+}
+
+.gallery-item img {
+  width: 100%;
+  display: block;
+  transition: transform 0.4s ease, filter 0.3s ease;
+}
+
+.gallery-item:hover img {
+  transform: scale(1.05);
+}
+
+.gallery-item .overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  display: flex;
+  align-items: flex-end;
+  padding: 1rem;
+}
+
+.gallery-item:hover .overlay { opacity: 1; }
+
+.overlay-text {
+  transform: translateY(8px);
+  transition: transform 0.3s ease;
+}
+.gallery-item:hover .overlay-text { transform: translateY(0); }
+
+.overlay-text h4 {
+  font-family: 'Syne', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+}
+.overlay-text span {
+  font-size: 12px;
+  color: var(--teal);
+}
+
+/* LIGHTBOX */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.93);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+  padding: 2rem;
+}
+
+.lightbox.open {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.lightbox-inner {
+  position: relative;
+  max-width: 860px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.lightbox-img-wrap {
+  position: relative;
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.lightbox img {
+  width: 100%;
+  max-height: 70vh;
+  object-fit: contain;
+  display: block;
+  background: var(--bg2);
+  transition: opacity 0.2s ease;
+}
+
+.lightbox img.fading { opacity: 0; }
+
+.lightbox-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0 0.5rem;
+}
+
+.lightbox-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+}
+.lightbox-category { font-size: 13px; color: var(--teal); margin-top: 2px; }
+.lightbox-counter { font-size: 13px; color: var(--muted); }
+
+/* NAV BUTTONS */
+.lb-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255,255,255,0.07);
+  border: 1px solid var(--border);
+  color: #fff;
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s;
+  z-index: 10;
+}
+.lb-btn:hover { background: rgba(0,201,167,0.2); border-color: var(--teal); }
+.lb-prev { left: -56px; }
+.lb-next { right: -56px; }
+
+@media (max-width: 700px) {
+  .lb-prev { left: 8px; }
+  .lb-next { right: 8px; }
+}
+
+.lb-close {
+  position: fixed;
+  top: 1.5rem; right: 1.5rem;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid var(--border);
+  color: #fff;
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s;
+}
+.lb-close:hover { background: rgba(255,80,80,0.2); border-color: #ff5050; }
+
+/* EMPTY STATE */
+.empty {
+  text-align: center;
+  padding: 4rem;
+  color: var(--muted);
+  font-size: 14px;
+  display: none;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>My <span>Gallery</span></h1>
+  <p>A curated collection of visuals across different themes</p>
+</header>
+
+<div class="filters">
+  <button class="filter-btn active" data-filter="all">All</button>
+  <button class="filter-btn" data-filter="nature">Nature</button>
+  <button class="filter-btn" data-filter="city">City</button>
+  <button class="filter-btn" data-filter="abstract">Abstract</button>
+  <button class="filter-btn" data-filter="architecture">Architecture</button>
+</div>
+
+<div class="gallery" id="gallery"></div>
+<p class="empty" id="empty">No images in this category.</p>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+  <button class="lb-close" id="lb-close">✕</button>
+  <div class="lightbox-inner">
+    <div class="lightbox-img-wrap">
+      <button class="lb-btn lb-prev" id="lb-prev">&#8592;</button>
+      <img id="lb-img" src="" alt="" />
+      <button class="lb-btn lb-next" id="lb-next">&#8594;</button>
+    </div>
+    <div class="lightbox-info">
+      <div>
+        <div class="lightbox-title" id="lb-title"></div>
+        <div class="lightbox-category" id="lb-category"></div>
+      </div>
+      <div class="lightbox-counter" id="lb-counter"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const images = [
+  { src: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800", title: "Mountain Peak", category: "nature" },
+  { src: "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=800", title: "City at Night", category: "city" },
+  { src: "https://images.unsplash.com/photo-1519751138087-5bf79df62d5b?w=800", title: "Aurora Colors", category: "abstract" },
+  { src: "https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800", title: "Glass Tower", category: "architecture" },
+  { src: "https://images.unsplash.com/photo-1448375240586-882707db888b?w=800", title: "Forest Path", category: "nature" },
+  { src: "https://images.unsplash.com/photo-1444723121867-7a241cacace9?w=800", title: "City Roads", category: "city" },
+  { src: "https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=800", title: "Light Waves", category: "abstract" },
+  { src: "https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=800", title: "Modern Arch", category: "architecture" },
+  { src: "https://images.unsplash.com/photo-1501854140801-50d01698950b?w=800", title: "Green Valley", category: "nature" },
+  { src: "https://images.unsplash.com/photo-1514565131-fce0801e6175?w=800", title: "Neon Street", category: "city" },
+  { src: "https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?w=800", title: "Color Burst", category: "abstract" },
+  { src: "https://images.unsplash.com/photo-1560179707-f14e90ef3623?w=800", title: "Stone Bridge", category: "architecture" },
+];
+
+let currentFilter = 'all';
+let currentIndex = 0;
+let filtered = [...images];
+
+const gallery = document.getElementById('gallery');
+const lightbox = document.getElementById('lightbox');
+const lbImg = document.getElementById('lb-img');
+const lbTitle = document.getElementById('lb-title');
+const lbCategory = document.getElementById('lb-category');
+const lbCounter = document.getElementById('lb-counter');
+const emptyEl = document.getElementById('empty');
+
+function getFiltered() {
+  return currentFilter === 'all' ? images : images.filter(i => i.category === currentFilter);
+}
+
+function buildGallery() {
+  filtered = getFiltered();
+  gallery.innerHTML = '';
+  emptyEl.style.display = filtered.length === 0 ? 'block' : 'none';
+
+  filtered.forEach((img, idx) => {
+    const item = document.createElement('div');
+    item.className = 'gallery-item';
+    item.innerHTML = `
+      <img src="${img.src}&auto=format&fit=crop" alt="${img.title}" loading="lazy"/>
+      <div class="overlay">
+        <div class="overlay-text">
+          <h4>${img.title}</h4>
+          <span>${img.category}</span>
+        </div>
+      </div>`;
+    item.addEventListener('click', () => openLightbox(idx));
+    gallery.appendChild(item);
+  });
+}
+
+function openLightbox(idx) {
+  currentIndex = idx;
+  updateLightbox();
+  lightbox.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox() {
+  lightbox.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function updateLightbox() {
+  const img = filtered[currentIndex];
+  lbImg.classList.add('fading');
+  setTimeout(() => {
+    lbImg.src = img.src + '&auto=format&fit=contain';
+    lbImg.alt = img.title;
+    lbTitle.textContent = img.title;
+    lbCategory.textContent = img.category.charAt(0).toUpperCase() + img.category.slice(1);
+    lbCounter.textContent = `${currentIndex + 1} / ${filtered.length}`;
+    lbImg.classList.remove('fading');
+  }, 150);
+}
+
+function navigate(dir) {
+  currentIndex = (currentIndex + dir + filtered.length) % filtered.length;
+  updateLightbox();
+}
+
+// Filter buttons
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentFilter = btn.dataset.filter;
+    buildGallery();
+  });
+});
+
+document.getElementById('lb-prev').addEventListener('click', (e) => { e.stopPropagation(); navigate(-1); });
+document.getElementById('lb-next').addEventListener('click', (e) => { e.stopPropagation(); navigate(1); });
+document.getElementById('lb-close').addEventListener('click', closeLightbox);
+lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
+
+// Keyboard support
+document.addEventListener('keydown', e => {
+  if (!lightbox.classList.contains('open')) return;
+  if (e.key === 'ArrowLeft') navigate(-1);
+  if (e.key === 'ArrowRight') navigate(1);
+  if (e.key === 'Escape') closeLightbox();
+});
+
+buildGallery();
+</script>
+</body>
+</html>
