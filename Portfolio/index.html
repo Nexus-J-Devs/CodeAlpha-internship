@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Joshua Akinlotan — Frontend Developer</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap');
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --teal: #00C9A7;
+            --teal-dim: #00a98d;
+            --bg: #080808;
+            --bg2: #101010;
+            --bg3: #161616;
+            --border: #1f1f1f;
+            --text: #e8e8e8;
+            --muted: #666;
+            --muted2: #444;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 16px;
+            line-height: 1.7;
+        }
+
+        a {
+            color: var(--teal);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* NAV */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.2rem 5%;
+            background: rgba(8, 8, 8, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-logo {
+            font-family: 'Syne', sans-serif;
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--text);
+            letter-spacing: -0.5px;
+        }
+
+        .nav-logo span {
+            color: var(--teal);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-size: 14px;
+            color: var(--muted);
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--text);
+            text-decoration: none;
+        }
+
+        /* SECTIONS */
+        section {
+            padding: 6rem 5%;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+        }
+
+        /* HERO */
+        #hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding-top: 5rem;
+        }
+
+        .hero-tag {
+            display: inline-block;
+            font-size: 12px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--teal);
+            border: 1px solid rgba(0, 201, 167, 0.3);
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-name {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(42px, 7vw, 80px);
+            font-weight: 800;
+            line-height: 1.05;
+            letter-spacing: -2px;
+            color: #fff;
+            margin-bottom: 1rem;
+        }
+
+        .hero-name span {
+            color: var(--teal);
+        }
+
+        .hero-sub {
+            font-size: clamp(16px, 2vw, 20px);
+            color: var(--muted);
+            max-width: 520px;
+            margin-bottom: 2.5rem;
+            font-weight: 300;
+        }
+
+        .hero-btns {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: var(--teal);
+            color: #000;
+            font-family: 'Syne', sans-serif;
+            font-weight: 600;
+            font-size: 14px;
+            padding: 12px 28px;
+            border-radius: 6px;
+            transition: background 0.2s, transform 0.15s;
+            display: inline-block;
+        }
+
+        .btn-primary:hover {
+            background: var(--teal-dim);
+            text-decoration: none;
+            transform: translateY(-1px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text);
+            font-family: 'Syne', sans-serif;
+            font-weight: 600;
+            font-size: 14px;
+            padding: 12px 28px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            transition: border-color 0.2s, transform 0.15s;
+            display: inline-block;
+        }
+
+        .btn-outline:hover {
+            border-color: var(--teal);
+            color: var(--teal);
+            text-decoration: none;
+            transform: translateY(-1px);
+        }
+
+        /* SECTION LABEL */
+        .section-label {
+            font-size: 11px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--teal);
+            margin-bottom: 0.6rem;
+        }
+
+        .section-title {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(28px, 4vw, 40px);
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: -1px;
+            margin-bottom: 1rem;
+        }
+
+        .divider {
+            width: 40px;
+            height: 2px;
+            background: var(--teal);
+            margin-bottom: 2.5rem;
+        }
+
+        /* ABOUT */
+        #about {
+            background: var(--bg2);
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: start;
+        }
+
+        .about-text p {
+            color: #aaa;
+            margin-bottom: 1rem;
+            font-weight: 300;
+        }
+
+        .about-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .stat-card {
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1.2rem;
+        }
+
+        .stat-num {
+            font-family: 'Syne', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--teal);
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 2px;
+        }
+
+        .about-info {}
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 14px;
+        }
+
+        .info-item:last-child {
+            border-bottom: none;
+        }
+
+        .info-key {
+            color: var(--muted);
+        }
+
+        .info-val {
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        /* SKILLS */
+        #skills {
+            background: var(--bg);
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .skill-card {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: border-color 0.2s;
+        }
+
+        .skill-card:hover {
+            border-color: rgba(0, 201, 167, 0.3);
+        }
+
+        .skill-card h3 {
+            font-family: 'Syne', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 1rem;
+        }
+
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tag {
+            font-size: 12px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            color: #aaa;
+        }
+
+        /* PROJECTS */
+        #projects {
+            background: var(--bg2);
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .project-card {
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: border-color 0.2s, transform 0.2s;
+        }
+
+        .project-card:hover {
+            border-color: rgba(0, 201, 167, 0.3);
+            transform: translateY(-3px);
+        }
+
+        .project-type {
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--teal);
+            margin-bottom: 0.5rem;
+        }
+
+        .project-card h3 {
+            font-family: 'Syne', sans-serif;
+            font-size: 17px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 0.6rem;
+        }
+
+        .project-card p {
+            font-size: 13px;
+            color: var(--muted);
+            margin-bottom: 1rem;
+            font-weight: 300;
+        }
+
+        .project-link {
+            font-size: 13px;
+            color: var(--teal);
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .project-link:hover {
+            text-decoration: none;
+            opacity: 0.8;
+        }
+
+        /* CONTACT */
+        #contact {
+            background: var(--bg);
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+        }
+
+        .contact-text p {
+            color: #aaa;
+            font-weight: 300;
+            margin-bottom: 1.5rem;
+        }
+
+        .contact-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            color: #aaa;
+            font-size: 14px;
+        }
+
+        .contact-item a {
+            color: var(--teal);
+        }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px 16px;
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            border-color: var(--teal);
+        }
+
+        .contact-form textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .contact-form input::placeholder,
+        .contact-form textarea::placeholder {
+            color: var(--muted2);
+        }
+
+        /* FOOTER */
+        footer {
+            padding: 2rem 5%;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        /* RESUME SECTION */
+        #resume {
+            background: var(--bg2);
+        }
+
+        .resume-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+        }
+
+        .resume-block h3 {
+            font-family: 'Syne', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--teal);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .resume-item {
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .resume-item:last-child {
+            border-bottom: none;
+        }
+
+        .resume-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 4px;
+        }
+
+        .resume-item-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .resume-item-date {
+            font-size: 12px;
+            color: var(--teal);
+            white-space: nowrap;
+        }
+
+        .resume-item-sub {
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        /* ANIMATIONS */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 700px) {
+
+            .about-grid,
+            .contact-grid,
+            .resume-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            footer {
+                flex-direction: column;
+                gap: 0.5rem;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <div class="nav-logo">Nexus<span>.</span></div>
+        <ul class="nav-links">
+            <li><a href="#about">About</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#resume">Resume</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- HERO -->
+    <section id="hero">
+        <div class="container">
+            <h1 class="hero-name">Joshua<br><span>Akinlotan</span></h1>
+            <p class="hero-sub">Frontend Developer building clean, responsive websites for businesses and brands.</p>
+            <div class="hero-btns">
+                <a href="#projects" class="btn-primary">View Projects</a>
+                <a href="#contact" class="btn-outline">Get in Touch</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about">
+        <div class="container">
+            <div class="fade-in">
+                <p class="section-label">About Me</p>
+                <h2 class="section-title">Who I Am</h2>
+                <div class="divider"></div>
+            </div>
+            <div class="about-grid">
+                <div class="about-text fade-in">
+                    <p>I'm a Computer Science undergraduate at Redeemer's University, Nigeria, with a passion for
+                        building websites that look great and work seamlessly.</p>
+                    <p>I specialize in frontend development — turning designs into fully functional, responsive web
+                        experiences using HTML, CSS, and JavaScript.</p>
+                    <p>Currently interning at CodeAlpha as a Frontend Development Intern, where I'm building real-world
+                        projects and sharpening my skills.</p>
+                    <div class="about-stats">
+                        <div class="stat-card">
+                            <div class="stat-num">5+</div>
+                            <div class="stat-label">Projects Built</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-num">6mo</div>
+                            <div class="stat-label">Of Learning</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-info fade-in">
+                    <div class="info-item"><span class="info-key">Name</span><span class="info-val">Joshua
+                            Akinlotan</span></div>
+                    <div class="info-item"><span class="info-key">Alias</span><span class="info-val">Nexus</span></div>
+                    <div class="info-item"><span class="info-key">Location</span><span class="info-val">Lagos,
+                            Nigeria</span></div>
+                    <div class="info-item"><span class="info-key">University</span><span class="info-val">Redeemer's
+                            University</span></div>
+                    <div class="info-item"><span class="info-key">Degree</span><span class="info-val">B.Sc. Computer
+                            Science</span></div>
+                    <div class="info-item"><span class="info-key">GitHub</span><span class="info-val"><a
+                                href="https://github.com/Nexus-J-Devs" target="_blank">Nexus-J-Devs</a></span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section id="skills">
+        <div class="container">
+            <div class="fade-in">
+                <p class="section-label">What I Know</p>
+                <h2 class="section-title">Skills</h2>
+                <div class="divider"></div>
+            </div>
+            <div class="skills-grid">
+                <div class="skill-card fade-in">
+                    <h3>Frontend Development</h3>
+                    <div class="skill-tags">
+                        <span class="tag">HTML5</span>
+                        <span class="tag">CSS3</span>
+                        <span class="tag">JavaScript</span>
+                        <span class="tag">Responsive Design</span>
+                        <span class="tag">Flexbox</span>
+                        <span class="tag">CSS Grid</span>
+                    </div>
+                </div>
+                <div class="skill-card fade-in">
+                    <h3>Tools & Platforms</h3>
+                    <div class="skill-tags">
+                        <span class="tag">VS Code</span>
+                        <span class="tag">GitHub</span>
+                        <span class="tag">Git</span>
+                        <span class="tag">Netlify</span>
+                        <span class="tag">WordPress</span>
+                        <span class="tag">Elementor</span>
+                    </div>
+                </div>
+                <div class="skill-card fade-in">
+                    <h3>Design & Others</h3>
+                    <div class="skill-tags">
+                        <span class="tag">Canva</span>
+                        <span class="tag">Figma (Basic)</span>
+                        <span class="tag">UI/UX Basics</span>
+                        <span class="tag">Python (Learning)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section id="projects">
+        <div class="container">
+            <div class="fade-in">
+                <p class="section-label">What I've Built</p>
+                <h2 class="section-title">Projects</h2>
+                <div class="divider"></div>
+            </div>
+            <div class="projects-grid">
+                <div class="project-card fade-in">
+                    <p class="project-type">Business Website</p>
+                    <h3>Aluminum Company</h3>
+                    <p>A professional website template for an aluminum manufacturing company, featuring a clean layout
+                        and service showcase.</p>
+                    <a href="https://github.com/Nexus-J-Devs/Aluminum-Company" target="_blank" class="project-link">View
+                        on GitHub →</a>
+                </div>
+                <div class="project-card fade-in">
+                    <p class="project-type">Service Website</p>
+                    <h3>Plumbing Template</h3>
+                    <p>A responsive website template for a plumbing services business, built with HTML and CSS for easy
+                        customization.</p>
+                    <a href="https://github.com/Nexus-J-Devs/Plumbing-Template" target="_blank"
+                        class="project-link">View on GitHub →</a>
+                </div>
+                <div class="project-card fade-in">
+                    <p class="project-type">Fashion & Lifestyle</p>
+                    <h3>Fashion Designer Template</h3>
+                    <p>A stylish, modern website template designed for fashion designers and clothing brands to showcase
+                        their work.</p>
+                    <a href="https://github.com/Nexus-J-Devs/Fashion-Designer-temp" target="_blank"
+                        class="project-link">View on GitHub →</a>
+                </div>
+                <div class="project-card fade-in">
+                    <p class="project-type">Beauty & Wellness</p>
+                    <h3>Salon Template</h3>
+                    <p>A clean and elegant website template for hair and beauty salons, complete with services and
+                        booking sections.</p>
+                    <a href="https://github.com/Nexus-J-Devs/Te-s-HA-salon-template" target="_blank"
+                        class="project-link">View on GitHub →</a>
+                </div>
+                <div class="project-card fade-in">
+                    <p class="project-type">Web App</p>
+                    <h3>Calculator</h3>
+                    <p>A sleek, dark-themed calculator web app built with HTML, CSS and JavaScript. Supports all
+                        arithmetic operations and keyboard input.</p>
+                    <a href="https://github.com/Nexus-J-Devs" target="_blank" class="project-link">View on GitHub →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- RESUME -->
+    <section id="resume">
+        <div class="container">
+            <div class="fade-in">
+                <p class="section-label">Background</p>
+                <h2 class="section-title">Resume</h2>
+                <div class="divider"></div>
+            </div>
+            <div class="resume-grid">
+                <div class="resume-block fade-in">
+                    <h3>Experience</h3>
+                    <div class="resume-item">
+                        <div class="resume-item-header">
+                            <span class="resume-item-title">Frontend Development Intern</span>
+                            <span class="resume-item-date">May – Jun 2026</span>
+                        </div>
+                        <div class="resume-item-sub">CodeAlpha · Remote</div>
+                    </div>
+                    <div class="resume-item">
+                        <div class="resume-item-header">
+                            <span class="resume-item-title">Web Design Intern</span>
+                            <span class="resume-item-date">2025</span>
+                        </div>
+                        <div class="resume-item-sub">Flexisaf · Remote</div>
+                    </div>
+                    <div class="resume-item">
+                        <div class="resume-item-header">
+                            <span class="resume-item-title">Freelance Web Developer</span>
+                            <span class="resume-item-date">2024 – Present</span>
+                        </div>
+                        <div class="resume-item-sub">Self-employed · Lagos, Nigeria</div>
+                    </div>
+                </div>
+                <div class="resume-block fade-in">
+                    <h3>Education</h3>
+                    <div class="resume-item">
+                        <div class="resume-item-header">
+                            <span class="resume-item-title">B.Sc. Computer Science</span>
+                            <span class="resume-item-date">2023 – Present</span>
+                        </div>
+                        <div class="resume-item-sub">Redeemer's University · Ede, Nigeria</div>
+                        <div class="resume-item-sub" style="color:var(--teal); margin-top:4px; font-size:12px;">
+                            Currently Studying</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact">
+        <div class="container">
+            <div class="fade-in">
+                <p class="section-label">Let's Talk</p>
+                <h2 class="section-title">Contact</h2>
+                <div class="divider"></div>
+            </div>
+            <div class="contact-grid" style="grid-template-columns:1fr;">
+                <div class="fade-in">
+                    <p class="contact-text" style="color:#aaa; font-weight:300; margin-bottom:1.5rem;">Have a project in
+                        mind or want to work together? I'm open to freelance work and internship opportunities.</p>
+                    <div class="contact-links">
+                        <div class="contact-item">📧 <a
+                                href="mailto:akinlotanjoshua30@gmail.com">akinlotanjoshua30@gmail.com</a></div>
+                        <div class="contact-item">📍 Lagos, Nigeria</div>
+                        <div class="contact-item">💼 <a href="https://github.com/Nexus-J-Devs"
+                                target="_blank">github.com/Nexus-J-Devs</a></div>
+                        <div class="contact-item">🔗 <a href="https://linkedin.com/in/joshua-akinlotan"
+                                target="_blank">LinkedIn</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <span>© 2026 Nexus — Joshua Akinlotan</span>
+        <span>Built with HTML · CSS · JavaScript</span>
+    </footer>
+
+    <script>
+        // Scroll animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (e.isIntersecting) { e.target.classList.add('visible'); }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // Contact form
+        function handleSubmit(e) {
+            e.preventDefault();
+            const btn = e.target.querySelector('button');
+            btn.textContent = 'Sent ✓';
+            btn.style.background = '#0a8a70';
+            setTimeout(() => { btn.textContent = 'Send Message'; btn.style.background = ''; e.target.reset(); }, 3000);
+        }
+
+        // Active nav link on scroll
+        const sections = document.querySelectorAll('section[id]');
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            sections.forEach(s => {
+                const top = s.offsetTop - 100;
+                const bottom = top + s.offsetHeight;
+                const link = document.querySelector(`.nav-links a[href="#${s.id}"]`);
+                if (link) link.style.color = scrollY >= top && scrollY < bottom ? 'var(--teal)' : '';
+            });
+        });
+    </script>
+</body>
+
+</html>
